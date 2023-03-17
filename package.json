@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "dev": "nodemon src/app.js"
   },
   "author": "Sameer Devkar",
   "license": "ISC",
@@ -18,8 +18,11 @@
     "express-locale": "^2.0.2",
     "express-mongo-sanitize": "^2.2.0",
     "helmet": "^6.0.1",
-    "nodemon": "^2.0.21",
+    "mongoose": "^7.0.2",
     "swagger-ui-express": "^4.6.2",
     "xss-clean": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
   }
 }
