@@ -1,7 +1,7 @@
 import userModel from "../models/user.js";
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-// import { sendMail } from '../config/emailSender.js'
+import { sendMail } from '../config/emailSender.js'
 
 class userController {
     static login = async (req, res) => {
@@ -125,22 +125,22 @@ class userController {
     }
 
     static sendEmailOtp = async (req, res) => {
-        // const doc = await userModel.findOne({ _id: req.user.id });
-        // let remainingTime = new Date() <= new Date(doc.OTPExpires);
-        // if (remainingTime) {
-        //     return res.send({"status": "failed", "message": "wait for one minute for resend otp"});
-        // }
+        const doc = await userModel.findOne({ _id: req.user.id });
+        let remainingTime = new Date() <= new Date(doc.OTPExpires);
+        if (remainingTime) {
+            return res.send({"status": "failed", "message": "wait for one minute for resend otp"});
+        }
 
-        // let OTP = Math.floor(100000 + Math.random() * 900000);
-        // // sendMail(doc.email, OTP);
-        // doc["emailOTP"] = OTP;
-        // doc["OTPExpires"] = new Date(Date.now() + (1 * 60 * 1000));
-        // try {
-        //     await userModel.findByIdAndUpdate(doc.id, { emailOTP: OTP, OTPExpires: doc.OTPExpires });
-        //     res.send({ "status": "succuess", "message": "send otp" });
-        // } catch (error) {
-        //     res.send({ "status": "failed", "message": "server error" });
-        // }
+        let OTP = Math.floor(100000 + Math.random() * 900000);
+        sendMail(doc.email, OTP);
+        doc["emailOTP"] = OTP;
+        doc["OTPExpires"] = new Date(Date.now() + (1 * 60 * 1000));
+        try {
+            await userModel.findByIdAndUpdate(doc.id, { emailOTP: OTP, OTPExpires: doc.OTPExpires });
+            res.send({ "status": "succuess", "message": "send otp" });
+        } catch (error) {
+            res.send({ "status": "failed", "message": "server error" });
+        }
     }
 }
 
